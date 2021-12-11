@@ -32,8 +32,8 @@ def main():
         max_date_time = datetime.datetime.combine(max_date, datetime.datetime.min.time())
 
         st.title('EMA Periods')
-        period_ema_1 = st.number_input('EMA period 1', value=20)
-        period_ema_2 = st.number_input('EMA period 2', value=70)
+        period_ema_short = st.number_input('EMA period short', value=20)
+        period_ema_long = st.number_input('EMA period long', value=70)
 
     # Display
     df_price_raw = LoadData.price(connection)
@@ -55,14 +55,14 @@ def main():
         df_keywords_2 = LoadData.prepare_keywords(df_keywords_2_raw, timezone, granularity)
 
         df_final = Calculation.merge_tweet_price(df_keywords_1, df_keywords_2, df_price, min_date_time, max_date_time,
-                                                 period_ema_1, period_ema_2)
+                                                 period_ema_short, period_ema_long)
         df_final = Calculation.price_share(df_final)
         df_back_test, benef_backtest, benef_hold = Calculation.back_test(df=df_final, ptf_start=100, placed_start=0,
                                                                          perc_to_buy=1,
                                                                          perc_to_sold=1, commission_rate=0.001)
 
-        Graph.ema_line(df_final, df_final['date'], 'ratio_up_down', 'ratio_up_down_EMA_' + str(period_ema_1),
-                       'ratio_up_down_EMA_' + str(period_ema_2))
+        Graph.ema_line(df_final, df_final['date'], 'ratio_up_down', 'ratio_up_down_EMA_' + str(period_ema_short),
+                       'ratio_up_down_EMA_' + str(period_ema_long))
         Graph.price_signal(df_final)
         Graph.plot_back_test(df_back_test, benef_backtest, benef_hold)
 
