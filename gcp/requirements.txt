@@ -1,11 +1,8 @@
-#tweepy
 pandas
 numpy
 datetime
 sqlalchemy
-#pymysql
 mysqlclient
-#re
 vaderSentiment
 stop_words
 python-binance
